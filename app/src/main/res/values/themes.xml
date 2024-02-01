@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.ImageSearch" parent="Base.Theme.ImageSearch" />
+    <style name="Theme.ImageSearch.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.ImageSearch.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.ImageSearch.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
