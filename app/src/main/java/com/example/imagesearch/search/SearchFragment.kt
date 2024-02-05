@@ -2,15 +2,16 @@ package com.example.imagesearch.search
 
 import android.content.Context
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.imagesearch.BuildConfig
+import com.example.imagesearch.SearchItem
 import com.example.imagesearch.databinding.FragmentSearchBinding
-import com.example.imagesearch.retrofit.RetrofitInstance
+import com.example.imagesearch.retrofit.ImageModel
 import com.example.imagesearch.retrofit.RetrofitInstance.apiService
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,6 +20,10 @@ import retrofit2.Response
 class SearchFragment : Fragment() {
 
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
+
+    private val mContext by lazy { context }
+
+    private var resItems: ArrayList<SearchItem> = ArrayList()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,8 +47,27 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    private fun imageSearch(query: String) {
+    private suspend fun imageSearch(query: String) {
+        apiService.imgSearch(BuildConfig.KAKAO_API_KEY, query, 1, 80).enqueue(object : Callback<ImageModel?> {
+            override fun onResponse(call: Call<ImageModel?>, response: Response<ImageModel?>) {
+                response.body()?.meta.let { meta ->
+                    if (meta?.totalCount!! > 0) {
+                        response.body()!!.documents.forEach { document ->
+                            val title = document.displaySitename
+                            val datetime = document.datetime
+                            val url = document.thumbnailUrl
+                            resItems.add(SearchItem(title, datetime, url))
+                        }
+                    }
+                }
+                SearchAdapter(mContext).items = resItems
+                SearchAdapter(mContext).notifyDataSetChanged()
+            }
 
+            override fun onFailure(call: Call<ImageModel?>, t: Throwable) {
+                Log.d("search", "${t.message}")
+            }
+        })
     }
 
 //    companion object {

@@ -1,6 +1,7 @@
 package com.example.imagesearch.retrofit
 
 import com.example.imagesearch.BuildConfig.KAKAO_API_KEY
+import com.example.imagesearch.SearchItem
 import com.google.gson.internal.GsonBuildConfig
 import retrofit2.Call
 import retrofit2.Response
@@ -17,6 +18,6 @@ interface KakaoInterface {
         @Query("sort") sort: String?,
         @Query("page") page: Int,
         @Query("size") size: Int
-    ): Response<ImageModel>
+    ): Call<ImageModel>
 
 }

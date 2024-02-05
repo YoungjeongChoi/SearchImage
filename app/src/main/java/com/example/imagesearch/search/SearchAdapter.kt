@@ -14,9 +14,9 @@ import com.example.imagesearch.R
 import com.example.imagesearch.SearchItem
 import com.example.imagesearch.databinding.ResultItemBinding
 
-class SearchAdapter(private val mContext: Context) : RecyclerView.Adapter<SearchAdapter.ItemViewHolder>() {
+class SearchAdapter(private val mContext: Context?) : RecyclerView.Adapter<SearchAdapter.ItemViewHolder>() {
 
-    private var items = mutableListOf<SearchItem>()
+    var items = mutableListOf<SearchItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ResultItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
